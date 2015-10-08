@@ -276,36 +276,53 @@
 
     <script src="http://cdn.jsdelivr.net/raphael/2.1.2/raphael-min.js"></script>
     <script src="http://cdn.jsdelivr.net/justgage/1.0.1/justgage.min.js"></script>
+
+    <script src="js/pubnub-3.7.15.min.js"></script>
+
     <script>
       var cadence = new JustGage({
         id: "gauge-cadence",
-        value: 103,
+        value: 0,
         min: 0,
         max: 180,
         title: " "
       });
       var res = new JustGage({
         id: "gauge-res",
-        value: 4,
+        value: 0,
         min: 0,
         max: 9,
         title: " "
       });
       var watt = new JustGage({
         id: "gauge-watt",
-        value: 407,
+        value: 0,
         min: 0,
         max: 500,
         title: " "
       });
       var hr = new JustGage({
         id: "gauge-hr",
-        value: 67,
+        value: 0,
         min: 0,
         max: 180,
         title: " "
       });
-    </script>
+
+    pubnub = PUBNUB({
+        subscribe_key : 'sub-c-229ac5be-6cac-11e5-87d4-0619f8945a4f'
+    })
+
+    pubnub.subscribe({
+        channel : "ab23c2d93c880c8a86a714b8c0e2b702",
+        message : function(message,env,ch,timer,magic_ch){
+          cadence.refresh(message.cadence);
+          res.refresh(message.res);
+          watt.refresh(message.watt);
+          hr.refresh(message.hr);
+        },
+    })
+     </script>
 </body>
 
 </html>
